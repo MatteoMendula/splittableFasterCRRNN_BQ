@@ -1,0 +1,4 @@
+2023-06-23 17:34:51,704	INFO	torchdistill.common.main_util	Not using distributed mode
+2023-06-23 17:34:51,704	INFO	__main__	Namespace(config='/home/matteo/Documents/unibo/Tesi/Ubicomp_2023/code/sc2-benchmark-testable-splitting/configs/coco2017/supervised_compression/ghnd-bq/matteo.yaml', json=None, device='cuda', log='matteo.txt', start_epoch=0, iou_types=None, seed=None, test_only=False, student_only=False, no_dp_eval=False, log_config=False, world_size=1, dist_url='env://', adjust_lr=False)
+2023-06-23 17:35:01,064	INFO	torchdistill.common.main_util	ckpt file is not found at `None`
+2023-06-23 17:35:01,242	INFO	torchdistill.common.main_util	Loading model parameters

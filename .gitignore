@@ -1,0 +1,14 @@
+.idea/
+.ipynb_checkpoints/
+__pycache__/
+.editorconfig
+*.json
+*/imagenette2-320/*
+script/split_alternate/data/imagenette2-320/*
+script/split_alternate/data/cifar-10-batches-py/*
+*.onnx
+*.trt
+*.pt
+*.pth
+*.yaml
+script/split_alternate/data/*

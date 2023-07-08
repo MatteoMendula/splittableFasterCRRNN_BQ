@@ -8,6 +8,7 @@ from io import BytesIO
 
 parser = argparse.ArgumentParser(description='Parser jpge communication check')
 parser.add_argument('-c', '--compression', default=100, type=int)
+parser.add_argument('-f', '--forever', default=False, type=bool)
 args = vars(parser.parse_args())
 
 compression = args["compression"]
@@ -36,6 +37,14 @@ def send_tensor(tensor = np.array([[1, 2, 3], [4, 5, 6]]), url = "http://10.42.0
     return return_value
 
 if __name__ == '__main__':
+
+    # this is meant just to create noise
+    if args["forever"]:
+        while True:
+            print("sending noise")
+            lat = send_tensor()
+            time.sleep(1)
+
     for i in range(N_TESTS):
         print("sending: ", i)
         lat = send_tensor()

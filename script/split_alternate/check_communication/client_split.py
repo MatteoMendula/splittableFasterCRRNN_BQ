@@ -1,8 +1,13 @@
 import numpy as np
 import requests
-import json
 import time
 from io import BytesIO
+import argparse
+
+
+parser = argparse.ArgumentParser(description='Parser jpge communication check')
+parser.add_argument('-f', '--forever', default=False, type=bool)
+args = vars(parser.parse_args())
 
 np_array = np.load('reshaped.npy')
 np_array = np_array.astype("int8")
@@ -30,6 +35,14 @@ def send_tensor(np_array = np.array([[1, 2, 3], [4, 5, 6]]), url = "http://10.42
     return return_value
 
 if __name__ == '__main__':
+
+    # this is meant just to create noise
+    if args["forever"]:
+        while True:
+            print("sending noise")
+            lat = send_tensor()
+            time.sleep(1)
+
     for i in range(N_TESTS):
         print("sending: ", i)
         lat = send_tensor()

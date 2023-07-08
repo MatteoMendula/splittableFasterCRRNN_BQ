@@ -2,28 +2,22 @@ import numpy as np
 import requests
 import json
 import time
-import argparse
-from PIL import Image
 from io import BytesIO
 
-parser = argparse.ArgumentParser(description='Parser jpge communication check')
-parser.add_argument('-c', '--compression', default=100, type=int)
-args = vars(parser.parse_args())
+np_array = np.load('reshaped.npy')
+np_array = np_array.astype("int8")
+array_bytes = np_array.tobytes()
 
-compression = args["compression"]
-image = Image.open('kitchen.jpg')
+# Create an in-memory buffer using BytesIO
+buffer = BytesIO(array_bytes)
+files = {'np_array': buffer}
 
 latency = []
 fails = 0
-
 N_TESTS = 1000
 
-def send_tensor(tensor = np.array([[1, 2, 3], [4, 5, 6]]), url = "http://10.42.0.121:5000/furcifer_check_communication_jpeg"):
+def send_tensor(np_array = np.array([[1, 2, 3], [4, 5, 6]]), url = "http://10.42.0.121:5000/furcifer_check_communication"):
     start_time = time.time()
-    buffer = BytesIO()
-    image.save(buffer, "JPEG", quality=compression)
-    buffer.seek(0)
-    files = {'image': buffer}
     return_value = {}
     return_value["error"] = True
     try:
@@ -50,11 +44,4 @@ if __name__ == '__main__':
         print("Mean: " + str(mean))
         print("Variance: " + str(variance))
         print("Standard deviation: " + str(res))
-        with open("Output.txt", "a") as text_file:
-            text_file.write("mean: " + str(mean) + "\n")
-            text_file.write("variance: " + str(variance) + "\n")
-            text_file.write("standard deviation: " + str(res) + "\n")
     print("Fails: " + str(fails))
-    with open("Output.txt", "a") as text_file:
-        text_file.write("fails: " + str(fails) + "\n")
-

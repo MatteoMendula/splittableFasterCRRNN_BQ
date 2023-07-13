@@ -15,6 +15,7 @@ from io import BytesIO
 from PIL import Image
 import os
 import torchvision.transforms as transforms
+import cv2
 
 # resize image to desired height
 desired_height = 400
@@ -62,12 +63,14 @@ def get_coco_object_dictionary():
         class_names = [c.strip() for c in class_names]
     return class_names
 
-def plot_results(best_results, inputs, classes_to_labels):
+def plot_results(best_results, image, classes_to_labels):
     from matplotlib import pyplot as plt
     import matplotlib.patches as patches
+    import numpy as np
     fig, ax = plt.subplots(1)
-    ax.imshow(torch.transpose(inputs.squeeze(0), 0, 2).transpose(0, 1))
-    # ...with detections
+    image = np.array(image)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    ax.imshow(image)
     bboxes = best_results[0]["boxes"].cpu().detach().numpy().tolist()
     classes = best_results[0]["labels"].cpu().detach().numpy().tolist()
     confidences = best_results[0]["scores"].cpu().detach().numpy().tolist()
@@ -133,61 +136,29 @@ if __name__ == '__main__':
         transforms.ToTensor()
     ])
 
-    image_name = "./images/car.jpg"
-    image_name = "./images/car4k.jpg"
-    image_name = "./images/baseball.jpg"
-    image_name = "./images/car400x234.jpg"
-    image_name = "./images/car320x240.jpg"
-    image_name = "./images/car800x1280.jpg"
-    image_name = "./images/kitti_1.png"
-    image_name = "./images/kitchen.jpg"
-    image_name = "./images/matte.jpg"
+    cap = cv2.VideoCapture("/dev/video4")
+    ret, cv2_frame = cap.read()
 
-    image = Image.open(image_name)
+    image = Image.fromarray(cv2_frame)
 
-    # determining the height ratio
-    hpercent = (desired_height/float(image.size[1]))
-    wsize = int((float(image.size[0])*float(hpercent)))
-    # resize image and save
-    # wsize = int(desired_height * 16. / 9.)
-    # image = image.resize((wsize,desired_height), Image.ANTIALIAS)
-
-    image = transform(image)
-    my_image = torch.unsqueeze(torch.Tensor(image), 0)
+    my_image = transform(image)
+    my_image = torch.unsqueeze(torch.Tensor(my_image), 0)
     input = torch.tensor(my_image, dtype=torch.float32).cuda()
+
+    print("input.shape", input.shape)
 
     # save onnx
     parse_to_onnx(client_model, input)
 
     out_head = client_model(input)
-    original_tensor = out_head[0].to(torch.float32)
-    tensor = out_head[0].to(torch.uint8)
-    tensor = tensor.to(torch.float32)
-    results = [tensor, out_head[1], out_head[2], out_head[3], out_head[4], out_head[5]]
-    out_edge = edge_model(*results)
-
-
-    print("--------------")
-    print("original_tensor", original_tensor)
-    print("tensor", tensor)
-    print("--------------")
-    print("input shape", input.shape)
-    print("out_head[0] shape", out_head[0].shape)
-    print(out_head[0])
-    print(out_head[1])
-    print(out_head[2])
-    print(out_head[3])
-    print(out_head[4])
-    print(out_head[5])
-    
-
-
+    print("out_head:", out_head)
+    print("len out_head:", len(out_head))
+    print("type out_head:", type(out_head))
+    print("out_head shape:", out_head[0].shape)
+    out_edge = edge_model(*out_head)
+    print("out_edge:", out_edge)
     classes_to_labels= get_coco_object_dictionary()
-    plot_results(out_edge, input.cpu(), classes_to_labels)
+    print("classes_to_labels:", len(classes_to_labels))
+    plot_results(out_edge, cv2_frame, classes_to_labels)
 
-    jpeg_compression_size = jpeg_size_compression(image_name, jpeg_compression_quality, desired_height)
-
-    check_size_tensor = out_head[0].to(torch.int8)
-    image_size = check_size_tensor.element_size() * check_size_tensor.nelement()
-    print("[split compression rate]", image_size / jpeg_compression_size )
-
+  

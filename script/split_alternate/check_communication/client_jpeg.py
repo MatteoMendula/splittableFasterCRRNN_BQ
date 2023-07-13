@@ -8,6 +8,7 @@ from io import BytesIO
 
 parser = argparse.ArgumentParser(description='Parser jpge communication check')
 parser.add_argument('-c', '--compression', default=100, type=int)
+parser.add_argument('-s', '--sleep_time', default=0.5, type=float)
 parser.add_argument('-f', '--forever', default=False, type=bool)
 args = vars(parser.parse_args())
 
@@ -43,7 +44,7 @@ if __name__ == '__main__':
         while True:
             print("sending noise")
             lat = send_tensor()
-            time.sleep(1)
+            time.sleep(args["sleep_time"])
 
     for i in range(N_TESTS):
         print("sending: ", i)
@@ -59,7 +60,8 @@ if __name__ == '__main__':
         print("Mean: " + str(mean))
         print("Variance: " + str(variance))
         print("Standard deviation: " + str(res))
-        with open("Output.txt", "a") as text_file:
+        with open("out_jpeg.txt", "a") as text_file:
+            text_file.write("----------- compression {} -----------\n".format(compression))
             text_file.write("mean: " + str(mean) + "\n")
             text_file.write("variance: " + str(variance) + "\n")
             text_file.write("standard deviation: " + str(res) + "\n")

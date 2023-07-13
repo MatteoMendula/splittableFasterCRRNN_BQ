@@ -7,6 +7,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Parser jpge communication check')
 parser.add_argument('-f', '--forever', default=False, type=bool)
+parser.add_argument('-s', '--sleep_time', default=0.5, type=float)
 args = vars(parser.parse_args())
 
 np_array = np.load('reshaped.npy')
@@ -41,7 +42,7 @@ if __name__ == '__main__':
         while True:
             print("sending noise")
             lat = send_tensor()
-            time.sleep(1)
+            time.sleep(args["sleep_time"])
 
     for i in range(N_TESTS):
         print("sending: ", i)
@@ -50,6 +51,7 @@ if __name__ == '__main__':
             latency += lat["latency"]
         else:
             fails += 1
+
     if len(latency) > 0:
         mean = sum(latency) / len(latency)
         variance = sum([((x - mean) ** 2) for x in latency]) / len(latency)
@@ -57,4 +59,9 @@ if __name__ == '__main__':
         print("Mean: " + str(mean))
         print("Variance: " + str(variance))
         print("Standard deviation: " + str(res))
+        with open("out_split.txt", "a") as text_file:
+            text_file.write(" ----------------- \n")
+            text_file.write("mean: " + str(mean) + "\n")
+            text_file.write("variance: " + str(variance) + "\n")
+            text_file.write("standard deviation: " + str(res) + "\n")
     print("Fails: " + str(fails))

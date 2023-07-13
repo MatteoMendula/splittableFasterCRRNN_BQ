@@ -59,21 +59,12 @@ class ClientModel(nn.Module):
     def transform_forward(self, images: List[Tensor]):
         import torchvision.transforms.functional as Ft
         original_image_sizes: List[Tuple[int, int]] = []
-        print(images.shape)
         for img in images:
             val = img.shape[-2:]
             original_image_sizes.append((val[0], val[1]))
         images_hat = Ft.normalize(images, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        images_hat = Ft.resize(images_hat,(300,), Ft.InterpolationMode.BILINEAR, 1333, "warn")
-        images, _ = self.transform(images, None)
-
-        print("--------- transform_forward ----------")
-        print("images_hat shape: ", images_hat.shape)
-        print("images.image_sizes", images.image_sizes)
-        print("images.image_sizes", images.image_sizes)
-        print(self.transform)
-        print(images.tensors.shape)
-        print(images.tensors.shape[-2:])
+        # images_hat = Ft.resize(images_hat,(400,), Ft.InterpolationMode.BILINEAR, 1333, "warn")
+        # images, _ = self.transform(images, None)
 
         return images_hat, None, original_image_sizes, images_hat.shape[-2:]
 
@@ -97,10 +88,6 @@ class ClientModel(nn.Module):
         quantized_tensor = features[0].to(torch.float32).detach().cuda()
         scale = features[1].to(torch.float32).detach().cuda()
         zero_point = torch.tensor(features[2], dtype=torch.float32).cuda()
-
-        print("image_sizes: ", image_sizes)
-        print("original_image_sizes: ", original_image_sizes)
-        print("secondary_image_size: ", secondary_image_size)
 
         image_sizes = torch.tensor(image_sizes, dtype=torch.float32).cuda()
         original_image_sizes = torch.tensor(original_image_sizes, dtype=torch.float32).cuda()

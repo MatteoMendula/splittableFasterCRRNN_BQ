@@ -239,12 +239,6 @@ class ServerModel(nn.Module):
         # targets is None
         features = self.backbone((quantized_tensor, scale, zero_point))
 
-        print('features', features)
-        print('image_sizes', image_sizes)
-        print('original_image_sizes', original_image_sizes)
-        print('secondary_image_size', secondary_image_size)
-
-
         image_sizes = [(int(image_sizes[0].item()), int(image_sizes[1].item()))]
         original_image_sizes = [(int(original_image_sizes[0].item()), int(original_image_sizes[1].item()))]
         secondary_image_size = torch.Size([int(secondary_image_size[0].item()), int(secondary_image_size[1].item())])

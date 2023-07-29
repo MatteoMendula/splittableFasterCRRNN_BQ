@@ -4,7 +4,7 @@ from PIL import Image
   
 # define a function for
 # compressing an image
-def compressMe(file):
+def compressMe(file, compression):
     
       
     # open the image
@@ -17,15 +17,16 @@ def compressMe(file):
     # the value of quality variable 
     # and lesser the compression
     print("Compressing "+file+"...")
-    picture.save("check_"+file, 
+    picture.save("matte_"+str(compression)+".jpg", 
                  "JPEG", 
                 #  optimize = True, 
-                 quality = 70)
+                 quality = compression)
     return
   
 # Define a main function
 def main():
-    compressMe("car.jpg")
+    for el in [50, 30]:
+        compressMe("matte.jpg", el)
 
 if __name__ == "__main__":
     main()

@@ -52,10 +52,10 @@ PARAMS['REFRESH_ITERS'] = 10 # for fixed method, how many fixed iterations to re
 
 # params for model yamls
 # RESIZE 400 2CH
-# PARAMS['FASTER_RCNN_YAML'] = '../../configs/coco2017/supervised_compression/ghnd-bq/matteo1CH_400.yaml'
+PARAMS['FASTER_RCNN_YAML'] = '../../configs/coco2017/supervised_compression/ghnd-bq/matteo1CH_400.yaml'
 # PARAMS['FASTER_RCNN_YAML'] = '../../configs/coco2017/supervised_compression/ghnd-bq/matteo2CH_400.yaml'
 
-PARAMS['FASTER_RCNN_YAML'] = '../../configs/coco2017/supervised_compression/ghnd-bq/faster_rcnn_resnet50-bq1ch_fpn_from_faster_rcnn_resnet50_fpn.yaml'
+# PARAMS['FASTER_RCNN_YAML'] = '../../configs/coco2017/supervised_compression/ghnd-bq/faster_rcnn_resnet50-bq1ch_fpn_from_faster_rcnn_resnet50_fpn.yaml'
 # PARAMS['FASTER_RCNN_YAML'] = '../../configs/coco2017/supervised_compression/ghnd-bq/faster_rcnn_resnet50-bq2ch_fpn_from_faster_rcnn_resnet50_fpn.yaml'
 # PARAMS['FASTER_RCNN_YAML'] = '../../configs/coco2017/supervised_compression/ghnd-bq/faster_rcnn_resnet50-bq3ch_fpn_from_faster_rcnn_resnet50_fpn.yaml'
 # PARAMS['FASTER_RCNN_YAML'] = '../../configs/coco2017/supervised_compression/ghnd-bq/faster_rcnn_resnet50-bq6ch_fpn_from_faster_rcnn_resnet50_fpn.yaml'

@@ -1,20 +1,14 @@
 import torch
 import os
-import sys
-import time
 
 from split_models import model_1
-from params import PARAMS, CURR_DATE, DESIRED_CLASSES
-from torchdistill.common.main_util import load_ckpt
-from torchdistill.models.registry import get_model
+from params import PARAMS
 
 from torchdistill.common import yaml_util
 from sc2bench.models.detection.registry import load_detection_model
 from sc2bench.models.detection.wrapper import get_wrapped_detection_model
 
-from PIL import Image
 import torchvision.transforms as transforms 
-
 from torchvision.io.image import read_image
 from torchvision.models.detection import fasterrcnn_resnet50_fpn_v2, FasterRCNN_ResNet50_FPN_V2_Weights,FasterRCNN_MobileNet_V3_Large_FPN_Weights,fasterrcnn_mobilenet_v3_large_fpn
 from torchvision.utils import draw_bounding_boxes
@@ -23,10 +17,11 @@ from tqdm import tqdm
 from pycocotools.coco import COCO
 from copy import deepcopy
 from pycocotools.cocoeval import COCOeval
-import cv2
+
 from typing import Union
 import warnings
 import os
+from PIL import Image
 import json
 warnings.filterwarnings('ignore')
 

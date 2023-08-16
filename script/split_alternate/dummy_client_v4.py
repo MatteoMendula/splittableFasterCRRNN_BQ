@@ -80,9 +80,14 @@ def plot_results(best_results, inputs, classes_to_labels):
 
         left, bot, right, top = bboxes[idx]
         x, y, w, h = [val for val in [left, bot, right - left, top - bot]]
+        y = y + 15
         rect = patches.Rectangle((x, y), w, h, linewidth=1, edgecolor='r', facecolor='none')
         ax.add_patch(rect)
-        ax.text(x, y, "{} {:.0f}%".format(classes_to_labels[classes[idx] - 1], confidences[idx]*100), bbox=dict(facecolor='white', alpha=0.5))
+        ax.text(x - 50, y, "{} {:.0f}%".format(classes_to_labels[classes[idx] - 1], confidences[idx]*100), bbox=dict(facecolor='white', alpha=0.5))
+    
+    plt.axis('off')
+    plt.tight_layout(pad=0)
+    plt.savefig("./kitti_detection.jpg", bbox_inches='tight', pad_inches=0)
     plt.show()
 
 def load_model(model_config, device):
@@ -139,9 +144,9 @@ if __name__ == '__main__':
     image_name = "./images/car400x234.jpg"
     image_name = "./images/car320x240.jpg"
     image_name = "./images/car800x1280.jpg"
-    image_name = "./images/kitti_1.png"
     image_name = "./images/kitchen.jpg"
     image_name = "./images/matte.jpg"
+    image_name = "./images/kitti_1.png"
 
     image = Image.open(image_name)
 
